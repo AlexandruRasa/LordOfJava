@@ -162,12 +162,17 @@ public class LordOfJava {
         if (round == 1 && this.elves.getResources() >= 50) {
             this.elves.setScout(true);
             this.elves.setResources(this.elves.getResources() - 50);
+            System.out.println("Elves have bought a scout.");
         } else if (round == 2 && this.paladins.getResources() >= 50) {
             this.paladins.setScout(true);
             this.paladins.setResources(this.paladins.getResources() - 50);
+            System.out.println("Paladins have bought a scout.");
         } else if (round == 3 && this.trolls.getResources() >= 50) {
             this.trolls.setScout(true);
             this.trolls.setResources(this.trolls.getResources() - 50);
+            System.out.println("Trolls have bought a scout.");
+        } else {
+            System.out.println("Not enough resources");
         }
     }
 
