@@ -1,11 +1,11 @@
 package LordOfJava;
 
-public class Orc extends Creature {
+public class Troll extends Creature {
 
-    private int strength;
-    private int summons;
+    private final int strength;
+    private final int summons;
 
-    public Orc(double stamina, double speed, int agility, String nickName, int strength, int summons) {
+    public Troll(double stamina, double speed, int agility, String nickName, int strength, int summons) {
         super(stamina, speed, agility, nickName);
         this.strength = strength;
         this.summons = summons;
@@ -21,17 +21,17 @@ public class Orc extends Creature {
 
     @Override
     public double characterPower() {
-        return super.characterPower() + (this.strength * this.summons);
+        return super.characterPower() + (getStrength() * getSummons());
     }
 
     @Override
     public void powerUp(double stamina, double speed, int agility) {
-        super.powerUp(5 * stamina + (this.strength * this.summons), speed / 2, agility / 2);
+        super.powerUp(5 * stamina + (getStrength() * getSummons()), speed / 2, agility / 2);
     }
 
     @Override
     public String toString() {
-        return "Orc:\n" +
+        return "Troll:\n" +
                 super.toString() +
                 "\nStrength:" + this.strength +
                 "\nSummons:" + this.summons;

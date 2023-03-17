@@ -2,8 +2,8 @@ package LordOfJava;
 
 public class Elf extends Creature {
 
-    private int vision;
-    private int spell;
+    private final int vision;
+    private final int spell;
 
     public Elf(double stamina, double speed, int agility, String nickName, int vision, int spell) {
         super(stamina, speed, agility, nickName);
@@ -26,7 +26,7 @@ public class Elf extends Creature {
 
     @Override
     public void powerUp(double stamina, double speed, int agility) {
-        super.powerUp(stamina / 2, speed + (this.vision * this.spell), agility * 2);
+        super.powerUp(stamina / 2, speed + (getVision() * getSpell()), agility * 2);
     }
 
     @Override

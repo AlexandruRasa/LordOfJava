@@ -1,11 +1,11 @@
 package LordOfJava;
 
-public class Human extends Creature {
+public class Paladin extends Creature {
 
-    private int courage;
-    private int honor;
+    private final int courage;
+    private final int honor;
 
-    public Human(double stamina, double speed, int agility, String nickName, int courage, int honor) {
+    public Paladin(double stamina, double speed, int agility, String nickName, int courage, int honor) {
         super(stamina, speed, agility, nickName);
         this.courage = courage;
         this.honor = honor;
@@ -26,12 +26,12 @@ public class Human extends Creature {
 
     @Override
     public void powerUp(double stamina, double speed, int agility) {
-        super.powerUp(stamina + (this.courage * this.honor), speed, agility);
+        super.powerUp(stamina + (getCourage() * getHonor()), speed, agility);
     }
 
     @Override
     public String toString() {
-        return "Human:\n" +
+        return "Paladin:\n" +
                 super.toString() +
                 "\nCourage: " + this.courage +
                 "\nHonor: " + this.honor;
