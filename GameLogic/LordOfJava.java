@@ -6,14 +6,14 @@ public class LordOfJava {
 
     private Parameters parameters;
     private Horde<Elf> elves;
-    private Horde<Human> humans;
-    private Horde<Orc> orcs;
+    private Horde<Paladin> paladins;
+    private Horde<Troll> trolls;
 
     public LordOfJava(String OS, String gamePATH, String credentials) {
         this.parameters = new Parameters(OS, gamePATH, credentials);
         this.elves = new Horde<Elf>();
-        this.humans = new Horde<Human>();
-        this.orcs = new Horde<Orc>();
+        this.paladins = new Horde<Paladin>();
+        this.trolls = new Horde<Troll>();
     }
 
     public void addCreature(Creature creature, String address) throws IllegalArgumentException {
@@ -22,123 +22,137 @@ public class LordOfJava {
             this.elves.updateScore(30);
             this.elves.setResources(this.elves.getResources() - 30);
             this.elves.addNewCitizen(address, (Elf) creature);
-        } else if (creature instanceof Human &&
-                this.humans.getResources() >= 15) {
-            this.humans.updateScore(15);
-            this.humans.setResources(this.humans.getResources() - 15);
-            this.humans.addNewCitizen(address, (Human) creature);
-        } else if (creature instanceof Orc &&
-                this.orcs.getResources() >= 10) {
-            this.orcs.updateScore(10);
-            this.orcs.setResources(this.orcs.getResources() - 10);
-            this.orcs.addNewCitizen(address, (Orc) creature);
+        } else if (creature instanceof Paladin &&
+                this.paladins.getResources() >= 15) {
+            this.paladins.updateScore(15);
+            this.paladins.setResources(this.paladins.getResources() - 15);
+            this.paladins.addNewCitizen(address, (Paladin) creature);
+        } else if (creature instanceof Troll &&
+                this.trolls.getResources() >= 10) {
+            this.trolls.updateScore(10);
+            this.trolls.setResources(this.trolls.getResources() - 10);
+            this.trolls.addNewCitizen(address, (Troll) creature);
         } else {
             throw new IllegalArgumentException("Creature type unknown: " + creature.getClass().getName());
         }
     }
 
-    public int battle(int round, int option) {
+    public void battle(int round, int option) {
+        boolean condition1 = battleElvesPaladins();
+        boolean condition2 = battleElvesTrolls();
+        boolean condition3 = battlePaladinsTrolls();
         switch (round) {
             case 1:
-                if (option == 1 && battleElvesHumans()) {
+                if (option == 1 && condition1) {
                     System.out.println("Elves are victorious.");
                     this.elves.setResources(this.elves.getResources() + 300);
-                } else if (!battleElvesHumans()) {
+                    this.elves.updateScore(300);
+                } else if (!condition1) {
                     System.out.println("Elves are defeated.");
                     this.elves.setResources(50);
+                    this.paladins.updateScore(300);
                 }
-                if (option == 2 && this.battleElvesOrcs()) {
+                if (option == 2 && condition2) {
                     System.out.println("Elves are victorious.");
                     this.elves.setResources(this.elves.getResources() + 300);
-                } else if (!battleElvesOrcs()) {
+                    this.elves.updateScore(300);
+                } else if (!condition2) {
                     System.out.println("Elves are defeated.");
                     this.elves.setResources(50);
+                    this.trolls.updateScore(300);
                 }
                 break;
             case 2:
-                if (option == 1 && !battleElvesHumans()) {
-                    System.out.println("Humans are victorious.");
-                    this.humans.setResources(this.humans.getResources() + 300);
-                } else if (battleElvesHumans()) {
-                    System.out.println("Humans are defeated.");
-                    this.humans.setResources(50);
+                if (option == 1 && !condition1) {
+                    System.out.println("Paladins are victorious.");
+                    this.paladins.setResources(this.paladins.getResources() + 300);
+                    this.paladins.updateScore(300);
+                } else if (option == 1) {
+                    System.out.println("Paladins are defeated.");
+                    this.paladins.setResources(50);
+                    this.elves.updateScore(300);
                 }
-                if (option == 2 && battleHumansOrcs()) {
-                    System.out.println("Humans are victorious.");
-                    this.humans.setResources(this.humans.getResources() + 300);
-                } else if (!battleHumansOrcs()) {
-                    System.out.println("Humans are defeated.");
-                    this.humans.setResources(50);
+                if (option == 2 && condition3) {
+                    System.out.println("Paladins are victorious.");
+                    this.paladins.setResources(this.paladins.getResources() + 300);
+                    this.paladins.updateScore(300);
+                } else if (option == 2) {
+                    System.out.println("Paladins are defeated.");
+                    this.paladins.setResources(50);
+                    this.trolls.updateScore(300);
                 }
                 break;
             case 3:
-                if (option == 1 && !battleElvesOrcs()) {
-                    System.out.println("Orcs are victorious.");
-                    this.orcs.setResources(this.orcs.getResources() + 300);
-                } else if (battleElvesOrcs()) {
-                    System.out.println("Orcs are defeated.");
-                    this.orcs.setResources(50);
+                if (option == 1 && !condition2) {
+                    System.out.println("Trolls are victorious.");
+                    this.trolls.setResources(this.trolls.getResources() + 300);
+                    this.trolls.updateScore(300);
+                } else if (option == 1) {
+                    System.out.println("Trolls are defeated.");
+                    this.trolls.setResources(50);
+                    this.elves.updateScore(300);
                 }
-                if (option == 2 && !battleHumansOrcs()) {
-                    System.out.println("Orcs are victorious.");
-                    this.orcs.setResources(this.orcs.getResources() + 300);
-                } else if (battleHumansOrcs()) {
-                    System.out.println("Orcs are defeated.");
-                    this.orcs.setResources(50);
+                if (option == 2 && !condition3) {
+                    System.out.println("Trolls are victorious.");
+                    this.trolls.setResources(this.trolls.getResources() + 300);
+                    this.trolls.updateScore(300);
+                } else if (option == 2) {
+                    System.out.println("Trolls are defeated.");
+                    this.trolls.setResources(50);
+                    this.paladins.updateScore(300);
                 }
                 break;
             default:
                 System.out.println("---");
         }
-        return 0;
     }
 
-    private boolean battleElvesHumans() {
-        if (this.elves.size() < this.humans.size()) {
+    private boolean battleElvesPaladins() {
+        if (this.elves.size() < this.paladins.size()) {
             return false;
         }
-        if (this.elves.size() > this.humans.size()) {
+        if (this.elves.size() > this.paladins.size()) {
             return true;
         }
         ArrayList<Elf> armyElves = this.elves.getAllCitizensToFight();
-        ArrayList<Human> armyHumans = this.humans.getAllCitizensToFight();
+        ArrayList<Paladin> armyPaladins = this.paladins.getAllCitizensToFight();
         int score = 0;
         for (int i = 0; i < this.elves.size(); i++) {
-            int duelResult = armyElves.get(i).compareTo(armyHumans.get(i));
+            int duelResult = armyElves.get(i).compareTo(armyPaladins.get(i));
             score += Integer.compare(duelResult, 0);
         }
         return score >= 0;
     }
 
-    private boolean battleElvesOrcs() {
-        if (this.elves.size() < this.orcs.size()) {
+    private boolean battleElvesTrolls() {
+        if (this.elves.size() < this.trolls.size()) {
             return false;
         }
-        if (this.elves.size() > this.orcs.size()) {
+        if (this.elves.size() > this.trolls.size()) {
             return true;
         }
         ArrayList<Elf> armyElves = this.elves.getAllCitizensToFight();
-        ArrayList<Orc> armyOrcs = this.orcs.getAllCitizensToFight();
+        ArrayList<Troll> armyTrolls = this.trolls.getAllCitizensToFight();
         int score = 0;
         for (int i = 0; i < this.elves.size(); i++) {
-            int duelResult = armyElves.get(i).compareTo(armyOrcs.get(i));
+            int duelResult = armyElves.get(i).compareTo(armyTrolls.get(i));
             score += Integer.compare(duelResult, 0);
         }
         return score >= 0;
     }
 
-    private boolean battleHumansOrcs() {
-        if (this.humans.size() < this.orcs.size()) {
+    private boolean battlePaladinsTrolls() {
+        if (this.paladins.size() < this.trolls.size()) {
             return false;
         }
-        if (this.humans.size() > this.orcs.size()) {
+        if (this.paladins.size() > this.trolls.size()) {
             return true;
         }
-        ArrayList<Human> armyHumans = this.humans.getAllCitizensToFight();
-        ArrayList<Orc> armyOrcs = this.orcs.getAllCitizensToFight();
+        ArrayList<Paladin> armyPaladins = this.paladins.getAllCitizensToFight();
+        ArrayList<Troll> armyTrolls = this.trolls.getAllCitizensToFight();
         int score = 0;
-        for (int i = 0; i < this.humans.size(); i++) {
-            int duelResult = armyHumans.get(i).compareTo(armyOrcs.get(i));
+        for (int i = 0; i < this.paladins.size(); i++) {
+            int duelResult = armyPaladins.get(i).compareTo(armyTrolls.get(i));
             score += Integer.compare(duelResult, 0);
         }
         return score >= 0;
@@ -148,20 +162,20 @@ public class LordOfJava {
         if (round == 1 && this.elves.getResources() >= 50) {
             this.elves.setScout(true);
             this.elves.setResources(this.elves.getResources() - 50);
-        } else if (round == 2 && this.humans.getResources() >= 50) {
-            this.humans.setScout(true);
-            this.humans.setResources(this.humans.getResources() - 50);
-        } else if (round == 3 && this.orcs.getResources() >= 50) {
-            this.orcs.setScout(true);
-            this.orcs.setResources(this.orcs.getResources() - 50);
+        } else if (round == 2 && this.paladins.getResources() >= 50) {
+            this.paladins.setScout(true);
+            this.paladins.setResources(this.paladins.getResources() - 50);
+        } else if (round == 3 && this.trolls.getResources() >= 50) {
+            this.trolls.setScout(true);
+            this.trolls.setResources(this.trolls.getResources() - 50);
         }
     }
 
     public void scoutEnemyArmy(int round) {
         switch (round) {
             case 1:
-                if (this.elves.isScout() && (this.elves.estimatePowerOfArmy() >= this.humans.estimatePowerOfArmy()
-                        || this.elves.estimatePowerOfArmy() > this.orcs.estimatePowerOfArmy())) {
+                if (this.elves.isScout() && (this.elves.estimatePowerOfArmy() >= this.paladins.estimatePowerOfArmy()
+                        || this.elves.estimatePowerOfArmy() > this.trolls.estimatePowerOfArmy())) {
                     System.out.println("Elves army might be stronger than one of the enemy armies.");
                 } else if (this.elves.isScout()) {
                     System.out.println("Your army is weaker than the enemy.");
@@ -171,26 +185,26 @@ public class LordOfJava {
                 this.elves.setScout(false);
                 break;
             case 2:
-                if (this.humans.isScout() && (this.humans.estimatePowerOfArmy() >= this.elves.estimatePowerOfArmy()
-                        || this.humans.estimatePowerOfArmy() > this.orcs.estimatePowerOfArmy())) {
-                    System.out.println("Humans army might be stronger than one of the enemy armies.");
-                } else if (this.elves.isScout()) {
+                if (this.paladins.isScout() && (this.paladins.estimatePowerOfArmy() >= this.elves.estimatePowerOfArmy()
+                        || this.paladins.estimatePowerOfArmy() > this.trolls.estimatePowerOfArmy())) {
+                    System.out.println("Paladins army might be stronger than one of the enemy armies.");
+                } else if (this.paladins.isScout()) {
                     System.out.println("Your army is weaker than the enemy.");
                 } else {
                     System.out.println("You need to buy a scout first.");
                 }
-                this.humans.setScout(false);
+                this.paladins.setScout(false);
                 break;
             case 3:
-                if (this.orcs.isScout() && (this.orcs.estimatePowerOfArmy() >= this.humans.estimatePowerOfArmy()
-                        || this.orcs.estimatePowerOfArmy() > this.orcs.estimatePowerOfArmy())) {
-                    System.out.println("Orcs army might be stronger than one of the enemy armies.");
-                } else if (this.elves.isScout()) {
+                if (this.trolls.isScout() && (this.trolls.estimatePowerOfArmy() >= this.paladins.estimatePowerOfArmy()
+                        || this.trolls.estimatePowerOfArmy() > this.trolls.estimatePowerOfArmy())) {
+                    System.out.println("Trolls army might be stronger than one of the enemy armies.");
+                } else if (this.trolls.isScout()) {
                     System.out.println("Your army is weaker than the enemy.");
                 } else {
                     System.out.println("You need to buy a scout first.");
                 }
-                this.orcs.setScout(false);
+                this.trolls.setScout(false);
                 break;
             default:
                 System.out.println("---");
@@ -201,9 +215,9 @@ public class LordOfJava {
         if (round == 1) {
             this.elves.gatherResources();
         } else if (round == 2) {
-            this.humans.gatherResources();
+            this.paladins.gatherResources();
         } else if (round == 3) {
-            this.orcs.gatherResources();
+            this.trolls.gatherResources();
         }
     }
 
@@ -211,9 +225,9 @@ public class LordOfJava {
         if (round == 1) {
             System.out.println(this.elves.getScore());
         } else if (round == 2) {
-            System.out.println(this.humans.getScore());
+            System.out.println(this.paladins.getScore());
         } else if (round == 3) {
-            System.out.println(this.orcs.getScore());
+            System.out.println(this.trolls.getScore());
         } else{
             System.out.println("---");
         }

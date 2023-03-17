@@ -42,20 +42,6 @@ public class Horde <C extends Creature> {
         return this.army.size();
     }
 
-    public boolean isEmpty() {
-        return this.army.isEmpty();
-    }
-
-    public C getCitizenAt(String address) {
-        return this.army.get(address);
-    }
-
-    public void getNickName(String address) {
-        if (this.army.containsKey(address)) {
-            System.out.println(this.army.get(address).getNickName());
-        }
-    }
-
     public void addNewCitizen(String address, C creature) {
         if (address != null && creature != null) {
             this.army.put(address,creature);
