@@ -1,4 +1,4 @@
-package LordOfJava;
+package LordOfJava.Characters;
 
 public class Troll extends Creature {
 

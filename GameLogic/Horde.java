@@ -1,4 +1,6 @@
-package LordOfJava;
+package LordOfJava.GameLogic;
+
+import LordOfJava.Characters.Creature;
 
 import java.util.ArrayList;
 import java.util.Collections;

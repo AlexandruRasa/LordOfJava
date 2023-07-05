@@ -1,4 +1,4 @@
-package LordOfJava;
+package LordOfJava.Characters;
 
 public abstract class Creature implements ICreature, Comparable<Creature> {
 

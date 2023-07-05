@@ -1,4 +1,9 @@
-package LordOfJava;
+package LordOfJava.GameLogic;
+
+import LordOfJava.Characters.Creature;
+import LordOfJava.Characters.Elf;
+import LordOfJava.Characters.Paladin;
+import LordOfJava.Characters.Troll;
 
 import java.util.ArrayList;
 

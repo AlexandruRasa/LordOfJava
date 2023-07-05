@@ -1,5 +1,10 @@
 package LordOfJava;
 
+import LordOfJava.Characters.Elf;
+import LordOfJava.Characters.Paladin;
+import LordOfJava.Characters.Troll;
+import LordOfJava.GameLogic.LordOfJava;
+
 public class Main {
     public static void main(String[] args) {
 

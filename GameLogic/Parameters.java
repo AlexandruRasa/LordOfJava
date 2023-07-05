@@ -1,4 +1,4 @@
-package LordOfJava;
+package LordOfJava.GameLogic;
 
 public class Parameters {
 
